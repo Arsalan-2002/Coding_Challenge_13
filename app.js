@@ -1,17 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
     const productContainer = document.getElementById('product-container');
+    const errorContainer = document.getElementById('error-container');
 
     const fetchProducts = async () => {
         try {
             const response = await fetch('https://course-api.com/react-store-products');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const products = await response.json();
             displayProducts(products);
         } catch (error) {
-            console.error('Error fetching products:', error);
+            displayError(error.message);
         }
     };
 
     const displayProducts = (products) => {
+        productContainer.innerHTML = ''; // Clear any existing content
         products.forEach(product => {
             const productElement = document.createElement('div');
             productElement.classList.add('product');
@@ -25,6 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             productContainer.appendChild(productElement);
         });
+    };
+
+    const displayError = (errorMessage) => {
+        errorContainer.innerHTML = `<p>Error: ${errorMessage}</p>`;
     };
 
     fetchProducts();

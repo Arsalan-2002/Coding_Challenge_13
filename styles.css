@@ -43,3 +43,9 @@ body {
     color: #e74c3c;
     margin-top: 10px;
 }
+
+#error-container {
+    color: #e74c3c;
+    text-align: center;
+    margin-bottom: 20px;
+}
