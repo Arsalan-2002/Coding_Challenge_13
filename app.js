@@ -16,7 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             products = await response.json();
-            displayProduct(currentIndex);
+            if (products.length > 0) {
+                displayProduct(currentIndex);
+            } else {
+                displayError('No products available.');
+            }
         } catch (error) {
             displayError(error.message);
         } finally {
@@ -53,13 +57,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const showPreviousProduct = () => {
-        currentIndex = (currentIndex === 0) ? products.length - 1 : currentIndex - 1;
-        displayProduct(currentIndex);
+        if (products.length > 0) {
+            currentIndex = (currentIndex === 0) ? products.length - 1 : currentIndex - 1;
+            displayProduct(currentIndex);
+        }
     };
 
     const showNextProduct = () => {
-        currentIndex = (currentIndex === products.length - 1) ? 0 : currentIndex + 1;
-        displayProduct(currentIndex);
+        if (products.length > 0) {
+            currentIndex = (currentIndex === products.length - 1) ? 0 : currentIndex + 1;
+            displayProduct(currentIndex);
+        }
     };
 
     prevButton.addEventListener('click', showPreviousProduct);
