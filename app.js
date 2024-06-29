@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const productContainer = document.getElementById('product-container');
     const errorContainer = document.getElementById('error-container');
+    const loadingContainer = document.getElementById('loading-container');
 
     const fetchProducts = async () => {
+        showLoading();
         try {
             const response = await fetch('https://course-api.com/react-store-products');
             if (!response.ok) {
@@ -12,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
             displayProducts(products);
         } catch (error) {
             displayError(error.message);
+        } finally {
+            hideLoading();
         }
     };
 
@@ -34,6 +38,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const displayError = (errorMessage) => {
         errorContainer.innerHTML = `<p>Error: ${errorMessage}</p>`;
+    };
+
+    const showLoading = () => {
+        loadingContainer.style.display = 'block';
+    };
+
+    const hideLoading = () => {
+        loadingContainer.style.display = 'none';
     };
 
     fetchProducts();
