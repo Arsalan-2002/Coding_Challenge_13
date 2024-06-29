@@ -2,6 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const productContainer = document.getElementById('product-container');
     const errorContainer = document.getElementById('error-container');
     const loadingContainer = document.getElementById('loading-container');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+
+    let products = [];
+    let currentIndex = 0;
 
     const fetchProducts = async () => {
         showLoading();
@@ -10,8 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            const products = await response.json();
-            displayProducts(products);
+            products = await response.json();
+            displayProduct(currentIndex);
         } catch (error) {
             displayError(error.message);
         } finally {
@@ -19,21 +24,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const displayProducts = (products) => {
+    const displayProduct = (index) => {
         productContainer.innerHTML = ''; // Clear any existing content
-        products.forEach(product => {
-            const productElement = document.createElement('div');
-            productElement.classList.add('product');
+        const product = products[index];
+        const productElement = document.createElement('div');
+        productElement.classList.add('product');
 
-            productElement.innerHTML = `
-                <img src="${product.image}" alt="${product.name}">
-                <h2>${product.name}</h2>
-                <p>${product.description}</p>
-                <div class="price">$${product.price}</div>
-            `;
+        productElement.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <h2>${product.name}</h2>
+            <p>${product.description}</p>
+            <div class="price">$${product.price}</div>
+        `;
 
-            productContainer.appendChild(productElement);
-        });
+        productContainer.appendChild(productElement);
     };
 
     const displayError = (errorMessage) => {
@@ -47,6 +51,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const hideLoading = () => {
         loadingContainer.style.display = 'none';
     };
+
+    const showPreviousProduct = () => {
+        currentIndex = (currentIndex === 0) ? products.length - 1 : currentIndex - 1;
+        displayProduct(currentIndex);
+    };
+
+    const showNextProduct = () => {
+        currentIndex = (currentIndex === products.length - 1) ? 0 : currentIndex + 1;
+        displayProduct(currentIndex);
+    };
+
+    prevButton.addEventListener('click', showPreviousProduct);
+    nextButton.addEventListener('click', showNextProduct);
 
     fetchProducts();
 });
