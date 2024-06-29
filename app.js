@@ -1,3 +1,5 @@
+//U32196076
+
 document.addEventListener('DOMContentLoaded', () => {
     const productContainer = document.getElementById('product-container');
     const errorContainer = document.getElementById('error-container');
